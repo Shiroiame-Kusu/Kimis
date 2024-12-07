@@ -12,10 +12,19 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
+    
+    
     - uses: actions/checkout@v4
+    - name: Set Up Swift
+      uses: fwal/setup-swift@v2
+      with:
+          swift-version: '6.0'
+    - name: Print Swift Version
+      run: swift --version
+
     - name: Clean
       run: xcodebuild clean
     - name: Run tests
