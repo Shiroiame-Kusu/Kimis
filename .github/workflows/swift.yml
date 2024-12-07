@@ -16,7 +16,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
+    - name: Clean
+      run: xcodebuild clean
     - name: Run tests
-      run: swift test -v
+      run: xcodebuild archive -scheme Kimis -archivePath ./build/Kimis.xcarchive -sdk iphoneos -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
+    - name: Pack
+      run: xcrun -sdk iphoneos PackageApplication -v ./build/Kimis.xcarchive/Products/Applications/Kimis.app -o ./build/Kimis.ipa
+
+    - uses: actions/upload-artifact@v4.4.3
+      with:
+        name: Kimis
+        path: ./build
