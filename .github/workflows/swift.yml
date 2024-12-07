@@ -26,9 +26,16 @@ jobs:
     - name: Run tests
       run: xcodebuild archive -scheme Kimis -archivePath ./build/Kimis.xcarchive -sdk iphoneos -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
     - name: Pack
-      run: xcrun -sdk iphoneos PackageApplication -v ./build/Kimis.xcarchive/Products/Applications/Kimis.app -o ./build/Kimis.ipa
+      run: | 
+        cp -r ./build/Kimis.xcarchive/Products/Applications/* ./
+        mkdir Payload
+        mv Kimis.app Payload/
+        zip -r Kimis.ipa Payload/
+        mkdir Upload
+        mv Kimis.ipa Upload/
+      
 
     - uses: actions/upload-artifact@v4.4.3
       with:
         name: Kimis
-        path: ./build
+        path: ./Upload
